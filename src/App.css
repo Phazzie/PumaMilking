@@ -1,7 +1,7 @@
 #root {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: clamp(1rem, 5vw, 2rem);
   text-align: center;
 }
 
@@ -33,10 +33,254 @@
   }
 }
 
+@keyframes fadeIn {
+  from { 
+    opacity: 0; 
+    transform: translateY(8px); 
+    filter: blur(4px);
+  }
+  to { 
+    opacity: 1; 
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes shimmer {
+  0% { background-position: -1000px 0; }
+  100% { background-position: 1000px 0; }
+}
+
+@keyframes subtle-float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  25% { transform: translateY(-2px) rotate(0.5deg); }
+  75% { transform: translateY(2px) rotate(-0.5deg); }
+}
+
+@keyframes magnetic-pull {
+  0% { --pull-strength: 0; }
+  50% { --pull-strength: 1; }
+  100% { --pull-strength: 0; }
+}
+
+@keyframes quantum-flicker {
+  0%, 100% { opacity: 0.99; }
+  50% { opacity: 1; }
+}
+
+.page-title {
+  background: linear-gradient(135deg, #1a1a2e, #16213e, #1a1a2e);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: fadeIn 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  position: relative;
+}
+
+.page-title::after {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: inherit;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  opacity: 0.5;
+  filter: blur(12px);
+  transform: translateY(2px);
+}
+
 .card {
-  padding: 2em;
+  padding: clamp(1.5em, 3vw, 2.5em);
+  background: linear-gradient(145deg, #ffffff, #f5f5f5);
+  border-radius: 16px;
+  box-shadow: 
+    0 4px 6px -1px rgba(0, 0, 0, 0.05),
+    0 2px 4px -1px rgba(0, 0, 0, 0.03),
+    inset 0 2px 4px rgba(255, 255, 255, 0.8);
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  border: 1px solid rgba(209, 213, 219, 0.3);
+  position: relative;
+  isolation: isolate;
+  --mouse-x: 0;
+  --mouse-y: 0;
+  --pull-strength: 0;
+  --quantum-state: 0;
+  transition: --quantum-state 0.2s ease;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  background: linear-gradient(
+    135deg,
+    #00000008,
+    #ffffff15,
+    #00000008
+  );
+  z-index: -1;
+  border-radius: inherit;
+  transition: opacity 0.3s;
+  opacity: 0;
+}
+
+.card:hover {
+  transform: translateY(-3px) scale(1.01);
+  box-shadow: 
+    0 20px 25px -5px rgba(0, 0, 0, 0.05),
+    0 10px 10px -5px rgba(0, 0, 0, 0.02),
+    inset 0 2px 4px rgba(255, 255, 255, 0.8);
+  --quantum-state: 1;
+  animation: quantum-flicker 0.1s infinite;
+}
+
+.card:hover::before {
+  opacity: 1;
+  animation: subtle-float 4s ease-in-out infinite;
+}
+
+@media (pointer: fine) {
+  .card:hover {
+    transform: 
+      perspective(1000px)
+      rotateX(calc(var(--mouse-y) * 5deg))
+      rotateY(calc(var(--mouse-x) * 5deg))
+      translateZ(10px);
+    transition: transform 0.1s;
+  }
+}
+
+@keyframes grain {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-2%, -2%); }
+  30% { transform: translate(1%, -1%); }
+  50% { transform: translate(-1%, 2%); }
+  70% { transform: translate(3%, 1%); }
+  90% { transform: translate(-1%, -1%); }
+}
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(250, 250, 250, 0.05) 25%,
+    rgba(250, 250, 250, 0.15) 50%,
+    rgba(250, 250, 250, 0.05) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  mask-image: linear-gradient(110deg, #000 25%, transparent 25%);
+  -webkit-mask-image: linear-gradient(110deg, #000 25%, transparent 25%);
+  mask-size: 200% 100%;
+  -webkit-mask-size: 200% 100%;
+}
+
+.glass-effect {
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(12px) saturate(180%) contrast(1.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  position: relative;
+  overflow: hidden;
+}
+
+.glass-effect::after {
+  content: '';
+  position: absolute;
+  inset: -100%;
+  background: linear-gradient(
+    45deg,
+    transparent 65%,
+    rgba(255, 255, 255, 0.08) var(--spread),
+    transparent calc(var(--spread) + 10%)
+  );
+  animation: aurora 8s linear infinite;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .glass-effect::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noise)'/%3E%3C/svg%3E");
+    opacity: 0.15;
+    animation: grain 8s steps(10) infinite,
+               quantum-flicker 2s ease-in-out infinite;
+    pointer-events: none;
+    mix-blend-mode: overlay;
+  }
+
+  .page-title {
+    animation: fadeIn 0.8s cubic-bezier(0.23, 1, 0.32, 1),
+               title-drift 15s ease-in-out infinite alternate;
+  }
+  
+  @keyframes title-drift {
+    0%, 100% { 
+      filter: hue-rotate(0deg); 
+      letter-spacing: -0.02em;
+    }
+    50% { 
+      filter: hue-rotate(30deg); 
+      letter-spacing: 0.01em;
+    }
+  }
+
+  .interactive {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateZ(calc(var(--quantum-state) * 20px));
+    filter: saturate(calc(100% + (var(--quantum-state) * 10%)));
+  }
 }
 
 .read-the-docs {
   color: #888;
+}
+
+@property --spread {
+  syntax: '<percentage>';
+  initial-value: 25%;
+  inherits: false;
+}
+
+@property --quantum-state {
+  syntax: '<number>';
+  initial-value: 0;
+  inherits: false;
+}
+
+.card:focus-within {
+  --spread: 35%;
+  transition: --spread 0.3s ease;
+}
+
+.card:focus-within::before {
+  background: conic-gradient(
+    from calc(var(--quantum-state) * 360deg),
+    rgba(255,255,255,0.1),
+    transparent
+  );
+  animation: aurora 4s linear infinite reverse;
+}
+
+@keyframes aurora {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Quantum superposition states for interactive elements */
+.interactive {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+.interactive:hover {
+  transform: translateZ(20px);
+  filter: drop-shadow(0 0 8px rgba(0, 0, 0, 0.1));
 }
