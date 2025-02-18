@@ -5,6 +5,18 @@ import AddPlayerModal from './components/AddPlayerModal';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import { useToast, ToastContainer } from './components/Toast';
 
+/* Ms Pac-Man Background Component */
+function MsPacmanBackground() {
+  return (
+    <div className="fixed inset-0 pointer-events-none overflow-hidden z-0" aria-hidden="true">
+      <div className="ghost ghost-1" title="Just following you... as always">👻</div>
+      <div className="ghost ghost-2" title="Taking the scenic route, are we?">👻</div>
+      <div className="ghost ghost-3" title="Oh, you're still here?">👻</div>
+      <div className="ghost ghost-4" title="Following tradition, I see">👻</div>
+    </div>
+  );
+}
+
 export default function App() {
   const [players, setPlayers] = useState<Player[]>([]);
   const [isAddPlayerOpen, setIsAddPlayerOpen] = useState(false);
@@ -24,7 +36,8 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
+    <div className="min-h-screen bg-black text-white relative">
+      <MsPacmanBackground />
       <div className="mx-auto max-w-7xl">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-semibold text-gray-900">
